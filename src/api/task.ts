@@ -17,3 +17,28 @@ export function getPolicy(data: any) {
     params: data
   })
 }
+
+//城市列表接口
+export function getCityList() {
+  return request({
+    url: 'sys/city/list',
+    method: 'get'
+  })
+}
+
+//banner列表接口
+export function getBannerList(data: any) {
+  return request({
+    url: '/home/banner/list',
+    method: 'get',
+    params: data
+  })
+}
+
+//职位类型接口
+export function getPositionList() {
+  return request({
+    url: '/position/positionTypeApi',
+    method: 'get',
+  })
+}

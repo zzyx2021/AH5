@@ -11,8 +11,8 @@ service.interceptors.request.use(
     const token = window.localStorage.getItem('token')
     //登录认证
     if (token) {
-      config.params = {
-        token: token,
+      config.headers = {
+        'x-access-token': token,
       }
     }
     return config

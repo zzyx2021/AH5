@@ -136,7 +136,6 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
   const token = localStorage.token
   const role = localStorage.role
-
   if(to.path === '/login/serviceAgree' || to.path === '/login/privacyPolicy') {
     next()
   } else if (to.path === '/' && token) {
@@ -146,7 +145,7 @@ router.beforeEach((to, _from, next) => {
       next('/talent');
     }
   } else if (to.path === '/' && !token) {
-    next('/login');
+    next();
   } else if (to.path !== '/' && !token) {
     next('/login');
   } else if (to.path !== '/' && token) {

@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
+import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { getCode, login } from '@/api/user'
 import { userStore } from '@/store/user'
+import { authStore } from '@/store/auth'
 import { showConfirmDialog, showToast } from 'vant'
 
 const store = userStore()
+const aStore = authStore()
 const router = useRouter()
 const state = reactive({
   checked: true,
@@ -56,20 +58,24 @@ const loginSubmit = async () => {
       })
   }
 
-  console.log(state.accounts);
   const res = await login({
     accounts: state.accounts,
-    code: state.code
+    code: state.code,
   })
-  console.log(res);
 
-  if(res.errCode == 200) {
+  if (res.errCode == 200) {
     //登录成功后需要把返回的数据存到store
     store.setUserInfo(res?.data)
-    if(store.role == '1' || store.role == '3') {
-      router.push('./task')
+
+    if (store.role == '1' || store.role == '3') {
+      if (aStore.redirectUrl) {
+        router.push(aStore.redirectUrl)
+        aStore.setRedirectUrl('')
+      } else router.push('./task')
     }
-    if(store.role == '2') {
+    if (store.role == '2') {
+      router.push(aStore.redirectUrl)
+      aStore.setRedirectUrl('')
       router.push('./talent')
     }
   } else {
@@ -80,7 +86,7 @@ const loginSubmit = async () => {
 
 <template>
   <div>
-    <van-icon class="icon-left" name="arrow-left" @click="clickLeft"/>
+    <van-icon class="icon-left" name="arrow-left" @click="clickLeft" />
     <div class="login-form">
       <h3>验证码登录</h3>
       <div class="login-form-item">
